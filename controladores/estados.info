@@ -1,0 +1,8 @@
+Códigos       Significado
+200           OK
+201           Creado
+204           No Contenido
+304           No Modificado
+401           Sin autorización
+404           No encontrado
+405           Metodo no permitido
