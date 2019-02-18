@@ -1,4 +1,4 @@
 RewriteEngine on
-RewriteCon %{REQUEST_FILENAME} !-f
-RewriteCon %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILNAME} !-f
+RewriteCond %{REQUEST_FILNAME} !-d
 RewriteRule ^(.*)$ index.php?PATH_INFO=$1 [L,QSA]

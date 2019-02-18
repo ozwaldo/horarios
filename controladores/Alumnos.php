@@ -24,6 +24,15 @@ class Alumnos
   const PASSWORD = "password";
   const CLAVE_API = "claveApi";
 
+  const ESTADO_CREACION_OK = 200;
+  const ESTADO_CREACION_ERROR = 404;
+  const ESTADO_ERROR_BD = 500;
+  const ESTADO_NO_CLAVE_API = 422;
+  const ESTADO_CLAVE_NO_AUTORIZADA = 401;
+  const ESTADO_URL_INCORRECTA = 400;
+  const ESTADO_FALLA_DESCONOCIDA = 504;
+  const ESTADO_DATOS_INCORRECTOS = 423;
+
   function __construct()
   {
     // code...
