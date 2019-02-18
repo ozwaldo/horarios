@@ -38,7 +38,7 @@
           PASSWORD,
           array(PDO::MYSQL_ATTR_INIT_COMMAND =>"SET NAMES utf8")
         );
-        self::$pdo->setAttribute(PDO::ATTR_ERRMOD,PDO::ERRMODE_EXCEPTION);
+        self::$pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
       }
       return self::$pdo;
     }
