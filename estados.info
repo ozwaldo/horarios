@@ -1,0 +1,29 @@
+Códigos    Significado
+200        OK
+201        Creado
+204        No Contenido
+304        No Modificado
+401        Sin autorización
+404        No encontrado
+405        Método no permitido
+422        Datos insuficientes
+429        Ha exedido el número de peticiones
+500        Error interno del servidor
+503        Servicio no disponible
+
+METODO      DESCRIPCION
+GET         Obtenemos un recurso o una colección.
+POST        Creamos un nuevo recurso.
+PUT         Actualizar un recurso específico
+DELETE      Elimina un recurso específico
+PATCH       Actualiza parcialmente un recurso específico
+
+Cabeceras (headers):
+
+Authorization.
+  -claveApi
+  -Token de autorización
+
+  Authorization: jQ1234ASDfjljASdf
+
+Caching.
