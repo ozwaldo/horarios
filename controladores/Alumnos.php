@@ -13,6 +13,9 @@
  * POST
  * localhost/horarios/alumnos/login
  */
+
+define('ESTADO_URL_INCORRECTA', 400);
+
 class Alumnos
 {
   const NCONTROL = "nControl";
@@ -29,8 +32,9 @@ class Alumnos
   const ESTADO_ERROR_BD = 500;
   const ESTADO_NO_CLAVE_API = 422;
   const ESTADO_CLAVE_NO_AUTORIZADA = 401;
-  const ESTADO_URL_INCORRECTA = 400;
-  const ESTADO_FALLA_DESCONOCIDA = 504;
+  // define('401','ESTADO_NO_CLAVE_API');
+  //const ESTADO_URL_INCORRECTA = 400;
+  const ESTADO_FALLA_DESCONOCsIDA = 504;
   const ESTADO_DATOS_INCORRECTOS = 423;
 
   function __construct()
