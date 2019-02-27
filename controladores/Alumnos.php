@@ -43,6 +43,13 @@ class Alumnos
     // code...
   }
 
+  public function registrarAlumno()
+  {
+    // { "nControl":"i15120278","nombre":"Zaira","a_paterno":"Sandoval","a_materno":"Garcia","carrera":"INF","email":"zahyrasg09@gmail.com"}
+    $cuerpo = file_get_contents('php://input');
+
+  }
+
   function crear($datosAlumno)
   {
     $nControl = $datosAlumno->nControl;
@@ -69,13 +76,25 @@ class Alumnos
       $query->bindParam(5, $datosAlumno->carrera);
       $query->bindParam(6, $datosAlumno->email);
       $query->bindParam(7, $passwordEnc);
-      $query->bindParam(7, self::generarClaveApi($datosAlumno->claveApi));
+      $query->bindParam(8, self::generarClaveApi());
+
+      $resultado = $query->execute();
+
+      if ($resultado) {
+        return self::ESTADO_CREACION_OK;
+      } else {
+        return self::ESTADO_CREACION_ERROR;
+      }
     } catch (PDOException $e) {
       throw new ExceptionApi(ESTADO_ERROR_BD,
         $e->getMessage());
     }
+  }
 
-
+  public function generarClaveApi()
+  {
+    $tiempo = microtime().rand();
+    return md5($tiempo);
   }
 
   function encriptarPassword($password)
