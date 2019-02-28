@@ -35,7 +35,7 @@ class Alumnos
   const ESTADO_CLAVE_NO_AUTORIZADA = 401;
   //const ESTADO_URL_INCORRECTA = 400;
   //define("ESTADO_URL_INCORRECTA", 400);
-  const ESTADO_FALLA_DESCONOCsIDA = 504;
+  const ESTADO_FALLA_DESCONOCIDA = 504;
   //const ESTADO_DATOS_INCORRECTOS = 423;
 
   function __construct()
@@ -47,10 +47,72 @@ class Alumnos
   {
     // { "nControl":"i15120278","nombre":"Zaira","a_paterno":"Sandoval","a_materno":"Garcia","carrera":"INF","email":"zahyrasg09@gmail.com"}
     $cuerpo = file_get_contents('php://input');
+    $alumnno = json_decode($cuerpo);
+
+    $resultado = self::crearAlumno($alumnno);
+    switch($resultado) {
+      case self::ESTADO_CREACION_OK:
+        http_response_code(200);
+        return [
+          "estado"=>self::ESTADO_CREACION_OK,
+          "mensaje"=>utf8_encode("Registro creado.")
+        ];
+        break;
+      case self::ESTADO_CREACION_ERROR:
+        throw new ExceptionApi(
+          self::ESTADO_CREACION_ERROR,
+          'Error al crear el Alumno.'
+        );
+        break;
+      default: 
+        throw new ExceptionApi(
+          self::ESTADO_FALLA_DESCONOCIDA, 
+          "Error desconocido.");
+    }
+  }
+
+  public function ingresar()
+  {
+    // { "email":"zahyrasg09@gmail.com","password":".........." }
+    $cuerpo = file_get_contents('php://input');
+    $datosAlumno = json_decode($cuerpo);
+
+    $respuesta = array();
+
+    $email = $datosAlumno->email;
+    $password = $datosAlumno->password;
+
 
   }
 
-  function crear($datosAlumno)
+  public function autenticarAlumno($email, $password)
+  {
+    $sql = "SELECT " . self::PASSWORD . 
+           " FROM " . self::NOMBRE_TABLA .
+           " WHERE " . self::EMAIL . " = ?";
+
+    try {
+      $pdo = ConexionBD::obtenerInstancia()->obtenerConexion();
+      $query = $pdo->prepare($sql);
+      $resultado = $query->execute();
+
+      if ($resultado) {
+        $resultado = $query->fetch();
+        if (passwrod_verify($password, $resultado['password'])) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+
+    } catch (PDOException $e) {
+      throw new ExceptionApi(self::ESTADO_ERROR_BD, $e);
+    }
+  }
+
+  function crearAlumno($datosAlumno)
   {
     $nControl = $datosAlumno->nControl;
     $nombre = $datosAlumno->nombre;
