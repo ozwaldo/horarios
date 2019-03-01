@@ -64,9 +64,9 @@ class Alumnos
           'Error al crear el Alumno.'
         );
         break;
-      default: 
+      default:
         throw new ExceptionApi(
-          self::ESTADO_FALLA_DESCONOCIDA, 
+          self::ESTADO_FALLA_DESCONOCIDA,
           "Error desconocido.");
     }
   }
@@ -82,12 +82,36 @@ class Alumnos
     $email = $datosAlumno->email;
     $password = $datosAlumno->password;
 
+    if (self::autenticarAlumno($email, $password)) {
+      $alumnno = self::getAlumnoPorEmail($email);
+    }
+  }
 
+  function getAlumnoPorEmail($email) {
+    $sql = "SELECT " .
+            self::NCONTROL . ", " .
+            self::NOMBRE . ", " .
+            self::A_PATERNO . ", " .
+            self::A_MATERNO . ", " .
+            self::CARRERA . ", " .
+            self::CLAVE_API .
+            " FROM " . self::NOMBRE_TABLA .
+            " WHERE " . self::EMAIL . " = ?" ;
+
+    $pdo = ConexionBD::obtenerInstancia()->obtenerConexion();
+    $query = $pdo->prepare($sql);
+    $query->bindParam(1,$email);
+
+    if ($query->execute()) {
+      return $query->fetch(PDO::FETCH_ASSOC);
+    } else {
+      return null;
+    }
   }
 
   public function autenticarAlumno($email, $password)
   {
-    $sql = "SELECT " . self::PASSWORD . 
+    $sql = "SELECT " . self::PASSWORD .
            " FROM " . self::NOMBRE_TABLA .
            " WHERE " . self::EMAIL . " = ?";
 
