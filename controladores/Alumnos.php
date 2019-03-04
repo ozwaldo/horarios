@@ -36,7 +36,7 @@ class Alumnos
   //const ESTADO_URL_INCORRECTA = 400;
   //define("ESTADO_URL_INCORRECTA", 400);
   const ESTADO_FALLA_DESCONOCIDA = 504;
-  //const ESTADO_DATOS_INCORRECTOS = 423;
+  const ESTADO_DATOS_INCORRECTOS = 423;
 
   function __construct()
   {
@@ -84,8 +84,39 @@ class Alumnos
 
     if (self::autenticarAlumno($email, $password)) {
       $alumnno = self::getAlumnoPorEmail($email);
+      if ($alumnno != null) {
+        http_response_code(200);
+        return [
+          "estado" => self::ESTADO_CREACION_OK,
+          "alumno" => $alumnno
+        ];
+      } else {
+        throw new ExceptionApi(self::ESTADO_FALLA_DESCONOCIDA, 
+        "Error al obtener los datos del Alumno.");       
+      }
+    } else {
+      throw new ExceptionApi(self::ESTADO_DATOS_INCORRECTOS, 
+        "Email o password incorrectos");
     }
   }
+
+  function autorizarAlumno(){
+    $cabecera = apache_request_headers();
+    if (isset($cabecera["Authorization"])) {
+      $claveApi = $cabecera["Authorization"];
+      if (Alumnos::validarClaveApi($claveApi)) {
+        
+      }
+    }
+  }
+
+  private function validarClaveApi($claveApi) {
+    $sql = "SELECT COUNT(". self::NCONTROL .")".
+          " FROM " . self::NOMBRE_TABLA . 
+          " WHERE " . self::CLAVE_API . " = $claveApi";
+    
+    
+  }   
 
   function getAlumnoPorEmail($email) {
     $sql = "SELECT " .
@@ -118,6 +149,7 @@ class Alumnos
     try {
       $pdo = ConexionBD::obtenerInstancia()->obtenerConexion();
       $query = $pdo->prepare($sql);
+      $query->bindParam(1, $email);
       $resultado = $query->execute();
 
       if ($resultado) {
