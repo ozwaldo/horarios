@@ -43,6 +43,19 @@ class Alumnos
     // code...
   }
 
+  public function post($solucitud)
+  {
+    if ($solucitud[0] == "registro") {
+      # code...
+    } elseif ($solucitud[0] == "ingresar") {
+      # code...
+    } else {
+      throw new ExceptionApi(self::ESTADO_URL_INCORRECTA, 
+        "Solicitud Incorrecta.");
+      
+    }
+  }
+
   public function registrarAlumno()
   {
     // { "nControl":"i15120278","nombre":"Zaira","a_paterno":"Sandoval","a_materno":"Garcia","carrera":"INF","email":"zahyrasg09@gmail.com"}
@@ -105,9 +118,35 @@ class Alumnos
     if (isset($cabecera["Authorization"])) {
       $claveApi = $cabecera["Authorization"];
       if (Alumnos::validarClaveApi($claveApi)) {
-        
+        return Alumnos::getIdAlumno($claveApi);
+      } else {
+        throw new ExceptionApi(self::ESTADO_CLAVE_NO_AUTORIZADA, 
+          "Clave API no valida.");        
       }
+    } else {
+      throw new ExceptionApi(self::ESTADO_NO_CLAVE_API, 
+        "Se requiere una clave API para la autorización.");
     }
+  }
+
+  private function getIdAlumno($claveApi)
+  {
+    /* 
+    1. Escribir la consulta para obtener Numero de Control Alumno.
+    2. Ejecutar la consulta.
+    3. Convertir el resultado de la consulta a un arreglo.
+    4. Devolver el Numero de Control del Alumno. 
+    */ 
+
+    $sql = "SELECT " . self::NCONTROL . 
+           " FROM " . self::NOMBRE_TABLA . 
+           " WHERE " . self::CLAVE_API . " = $claveApi";
+
+    $pdo = ConexionBD::obtenerInstancia()->obtenerConexion()->prepare($sql);
+    $pdo->excecute();
+
+    $resultado = $pdo->fetch();
+    return $resultado['nControl'];
   }
 
   private function validarClaveApi($claveApi) {
@@ -115,7 +154,10 @@ class Alumnos
           " FROM " . self::NOMBRE_TABLA . 
           " WHERE " . self::CLAVE_API . " = $claveApi";
     
-    
+    $pdo = ConexionBD::obtenerInstancia()->obtenerConexion()->prepare($sql);
+    $pdo->excecute();
+
+    return $pdo->fetchColumn(0) > 0;
   }   
 
   function getAlumnoPorEmail($email) {
@@ -224,6 +266,4 @@ class Alumnos
     }
   }
 }
-
-
 ?>
