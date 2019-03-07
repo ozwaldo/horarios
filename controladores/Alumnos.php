@@ -45,15 +45,21 @@ class Alumnos
 
   public function post($solucitud)
   {
-    if ($solucitud[0] == "registro") {
-      # code...
-    } elseif ($solucitud[0] == "ingresar") {
-      # code...
+    if (isset($solucitud)) {
+      if ($solucitud[0] == "registro") {
+        return self::registrarAlumno();
+      } elseif ($solucitud[0] == "ingresar") {
+        return self::ingresar();
+      } else {
+        throw new ExceptionApi(self::ESTADO_URL_INCORRECTA, 
+          "Solicitud Incorrecta.");
+      }
     } else {
-      throw new ExceptionApi(self::ESTADO_URL_INCORRECTA, 
-        "Solicitud Incorrecta.");
+      throw new ExceptionApi(self::ESTADO_DATOS_INCORRECTOS, 
+        "Error al solicitar información.");
       
     }
+    
   }
 
   public function registrarAlumno()

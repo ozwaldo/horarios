@@ -40,7 +40,25 @@
   if (!in_array($recurso,$recursos_disponibles)) {
     throw new ExceptionApi(ESTADO_DATOS_INCORRECTOS, "Recurso no disponible");    
   }
+
+  $metodo = strtolower($_SERVER['REQUEST_METHOD']);
   
-  
+  switch ($metodo) {
+    case 'get':
+      # code...
+      break;
+    case 'post':
+      $vista->imprimir(Alumnos::post($peticion));
+      break;
+    case 'put':
+    
+      break;
+    case 'delete':
+
+      break;
+    default:
+      # code...
+      break;
+  }
 
 ?>
