@@ -24,7 +24,7 @@ class Alumnos
   const A_PATERNO = "a_paterno";
   const A_MATERNO = "a_materno";
   const CARRERA = "carrera";
-  const EMAIL = "email";
+    const EMAIL = "email";
   const PASSWORD = "password";
   const CLAVE_API = "claveApi";
 
@@ -51,15 +51,15 @@ class Alumnos
       } elseif ($solucitud[0] == "ingresar") {
         return self::ingresar();
       } else {
-        throw new ExceptionApi(self::ESTADO_URL_INCORRECTA, 
+        throw new ExceptionApi(self::ESTADO_URL_INCORRECTA,
           "Solicitud Incorrecta.");
       }
     } else {
-      throw new ExceptionApi(self::ESTADO_DATOS_INCORRECTOS, 
+      throw new ExceptionApi(self::ESTADO_DATOS_INCORRECTOS,
         "Error al solicitar información.");
-      
+
     }
-    
+
   }
 
   public function registrarAlumno()
@@ -110,11 +110,11 @@ class Alumnos
           "alumno" => $alumnno
         ];
       } else {
-        throw new ExceptionApi(self::ESTADO_FALLA_DESCONOCIDA, 
-        "Error al obtener los datos del Alumno.");       
+        throw new ExceptionApi(self::ESTADO_FALLA_DESCONOCIDA,
+        "Error al obtener los datos del Alumno.");
       }
     } else {
-      throw new ExceptionApi(self::ESTADO_DATOS_INCORRECTOS, 
+      throw new ExceptionApi(self::ESTADO_DATOS_INCORRECTOS,
         "Email o password incorrectos");
     }
   }
@@ -126,26 +126,26 @@ class Alumnos
       if (Alumnos::validarClaveApi($claveApi)) {
         return Alumnos::getIdAlumno($claveApi);
       } else {
-        throw new ExceptionApi(self::ESTADO_CLAVE_NO_AUTORIZADA, 
-          "Clave API no valida.");        
+        throw new ExceptionApi(self::ESTADO_CLAVE_NO_AUTORIZADA,
+          "Clave API no valida.");
       }
     } else {
-      throw new ExceptionApi(self::ESTADO_NO_CLAVE_API, 
+      throw new ExceptionApi(self::ESTADO_NO_CLAVE_API,
         "Se requiere una clave API para la autorización.");
     }
   }
 
   private function getIdAlumno($claveApi)
   {
-    /* 
+    /*
     1. Escribir la consulta para obtener Numero de Control Alumno.
     2. Ejecutar la consulta.
     3. Convertir el resultado de la consulta a un arreglo.
-    4. Devolver el Numero de Control del Alumno. 
-    */ 
+    4. Devolver el Numero de Control del Alumno.
+    */
 
-    $sql = "SELECT " . self::NCONTROL . 
-           " FROM " . self::NOMBRE_TABLA . 
+    $sql = "SELECT " . self::NCONTROL .
+           " FROM " . self::NOMBRE_TABLA .
            " WHERE " . self::CLAVE_API . " = $claveApi";
 
     $pdo = ConexionBD::obtenerInstancia()->obtenerConexion()->prepare($sql);
@@ -157,14 +157,14 @@ class Alumnos
 
   private function validarClaveApi($claveApi) {
     $sql = "SELECT COUNT(". self::NCONTROL .")".
-          " FROM " . self::NOMBRE_TABLA . 
+          " FROM " . self::NOMBRE_TABLA .
           " WHERE " . self::CLAVE_API . " = $claveApi";
-    
+
     $pdo = ConexionBD::obtenerInstancia()->obtenerConexion()->prepare($sql);
     $pdo->excecute();
 
     return $pdo->fetchColumn(0) > 0;
-  }   
+  }
 
   function getAlumnoPorEmail($email) {
     $sql = "SELECT " .
