@@ -18,7 +18,7 @@ define('ESTADO_DATOS_INCORRECTOS',423);
 
 class Alumnos
 {
-  const NOMBRE_TABLA = "alumno";
+  const NOMBRE_TABLA = "alumnos";
   const NCONTROL = "nControl";
   const NOMBRE = "nombre";
   const A_PATERNO = "a_paterno";
