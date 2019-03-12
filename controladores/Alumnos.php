@@ -43,7 +43,7 @@ class Alumnos
     // code...
   }
 
-  public function post($solucitud)
+  public static function post($solucitud)
   {
     if (isset($solucitud)) {
       if ($solucitud[0] == "registro") {
@@ -62,9 +62,10 @@ class Alumnos
 
   }
 
-  public function registrarAlumno()
+  private static function registrarAlumno()
   {
     // { "nControl":"i15120278","nombre":"Zaira","a_paterno":"Sandoval","a_materno":"Garcia","carrera":"INF","email":"zahyrasg09@gmail.com"}
+    // {   "nControl": "i15120285",  "nombre": "Alfredo",  "a_paterno": "Maciel",  "a_materno": "Torres",  "carrera": "INF",  "password": "passwordZhido123",  "email": "i15120285@alumnos.itsur.edu.mx" }
     $cuerpo = file_get_contents('php://input');
     $alumnno = json_decode($cuerpo);
 
@@ -90,7 +91,7 @@ class Alumnos
     }
   }
 
-  public function ingresar()
+  public static function ingresar()
   {
     // { "email":"zahyrasg09@gmail.com","password":".........." }
     $cuerpo = file_get_contents('php://input');
@@ -155,7 +156,7 @@ class Alumnos
     return $resultado['nControl'];
   }
 
-  private function validarClaveApi($claveApi) {
+  private static function validarClaveApi($claveApi) {
     $sql = "SELECT COUNT(". self::NCONTROL .")".
           " FROM " . self::NOMBRE_TABLA .
           " WHERE " . self::CLAVE_API . " = $claveApi";
@@ -166,7 +167,7 @@ class Alumnos
     return $pdo->fetchColumn(0) > 0;
   }
 
-  function getAlumnoPorEmail($email) {
+  static function getAlumnoPorEmail($email) {
     $sql = "SELECT " .
             self::NCONTROL . ", " .
             self::NOMBRE . ", " .
@@ -188,12 +189,11 @@ class Alumnos
     }
   }
 
-  public function autenticarAlumno($email, $password)
+  public static function autenticarAlumno($email, $password)
   {
     $sql = "SELECT " . self::PASSWORD .
            " FROM " . self::NOMBRE_TABLA .
            " WHERE " . self::EMAIL . " = ?";
-
     try {
       $pdo = ConexionBD::obtenerInstancia()->obtenerConexion();
       $query = $pdo->prepare($sql);
@@ -202,7 +202,7 @@ class Alumnos
 
       if ($resultado) {
         $resultado = $query->fetch();
-        if (passwrod_verify($password, $resultado['password'])) {
+        if (password_verify($password, $resultado['password'])) {
           return true;
         } else {
           return false;
@@ -216,7 +216,7 @@ class Alumnos
     }
   }
 
-  function crearAlumno($datosAlumno)
+  private static function crearAlumno($datosAlumno)
   {
     $nControl = $datosAlumno->nControl;
     $nombre = $datosAlumno->nombre;
@@ -242,7 +242,8 @@ class Alumnos
       $query->bindParam(5, $datosAlumno->carrera);
       $query->bindParam(6, $datosAlumno->email);
       $query->bindParam(7, $passwordEnc);
-      $query->bindParam(8, self::generarClaveApi());
+      $clave = self::generarClaveApi();
+      $query->bindParam(8, $clave);
 
       $resultado = $query->execute();
 
@@ -257,13 +258,13 @@ class Alumnos
     }
   }
 
-  public function generarClaveApi()
+  private static function generarClaveApi()
   {
     $tiempo = microtime().rand();
     return md5($tiempo);
   }
 
-  function encriptarPassword($password)
+  private static function encriptarPassword($password)
   {
     if ($password) {
       return password_hash($password, PASSWORD_DEFAULT);
