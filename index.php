@@ -17,9 +17,9 @@
         "mensaje" => $exception->getMessage()
       );
       if ($exception->getCode()) {
-        $vista->estado = $exception->getCode();
+        $vista->nEstado = $exception->getCode();
       } else {
-        $vista->estado = 500;
+        $vista->mEstado = 500;
       }
       $vista->imprimir($body);
     }

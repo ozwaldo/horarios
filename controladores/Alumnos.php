@@ -33,7 +33,7 @@ class Alumnos
   const ESTADO_ERROR_BD = 500;
   const ESTADO_NO_CLAVE_API = 422;
   const ESTADO_CLAVE_NO_AUTORIZADA = 401;
-  //const ESTADO_URL_INCORRECTA = 400;
+  const ESTADO_URL_INCORRECTA = 400;
   //define("ESTADO_URL_INCORRECTA", 400);
   const ESTADO_FALLA_DESCONOCIDA = 504;
   const ESTADO_DATOS_INCORRECTOS = 423;
@@ -51,10 +51,12 @@ class Alumnos
       } elseif ($solucitud[0] == "ingresar") {
         return self::ingresar();
       } else {
+        http_response_code(400);
         throw new ExceptionApi(self::ESTADO_URL_INCORRECTA,
           "Solicitud Incorrecta.");
       }
     } else {
+      http_response_code(400);
       throw new ExceptionApi(self::ESTADO_DATOS_INCORRECTOS,
         "Error al solicitar información.");
 
@@ -79,12 +81,14 @@ class Alumnos
         ];
         break;
       case self::ESTADO_CREACION_ERROR:
+        http_response_code(400);
         throw new ExceptionApi(
           self::ESTADO_CREACION_ERROR,
           'Error al crear el Alumno.'
         );
         break;
       default:
+        http_response_code(500);
         throw new ExceptionApi(
           self::ESTADO_FALLA_DESCONOCIDA,
           "Error desconocido.");
@@ -111,10 +115,12 @@ class Alumnos
           "alumno" => $alumnno
         ];
       } else {
+        http_response_code(500);
         throw new ExceptionApi(self::ESTADO_FALLA_DESCONOCIDA,
         "Error al obtener los datos del Alumno.");
       }
     } else {
+      http_response_code(400);
       throw new ExceptionApi(self::ESTADO_DATOS_INCORRECTOS,
         "Email o password incorrectos");
     }
@@ -127,10 +133,12 @@ class Alumnos
       if (Alumnos::validarClaveApi($claveApi)) {
         return Alumnos::getIdAlumno($claveApi);
       } else {
+        http_response_code(400);
         throw new ExceptionApi(self::ESTADO_CLAVE_NO_AUTORIZADA,
           "Clave API no valida.");
       }
     } else {
+      http_response_code(400);
       throw new ExceptionApi(self::ESTADO_NO_CLAVE_API,
         "Se requiere una clave API para la autorización.");
     }

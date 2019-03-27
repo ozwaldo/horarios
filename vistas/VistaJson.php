@@ -8,7 +8,9 @@ require_once 'VistaApi.php';
 class VistaJson extends VistaApi
 {
   function __construct()
-  {}
+  {
+    
+  }
 
   public function imprimir($cuerpo)
   {
