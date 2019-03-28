@@ -1,5 +1,4 @@
 <?php
-
 /** 
  Acceder al recurso de gurpos
  * GET
@@ -27,7 +26,7 @@ class Grupos {
     const ALUMNO = "alumno";
     const ASIGNATURA = "asignatura";
 
-    public static function get()
+    public static function get($peticion)
     {
         # code...
     }
@@ -37,12 +36,12 @@ class Grupos {
         # code...
     }
 
-    public static function put()
+    public static function put($peticion)
     {
         # code...
     }
 
-    public static function delete()
+    public static function delete($peticion)
     {
         # code...
     }
