@@ -61,11 +61,14 @@ class Asignaturas {
                 // Obtener las asignaturas que pertenezcan al
                 // alumno autorizado.
                 
-                $sql = "SELECT * FROM " . self::NOMBRE_TABLA .
-                       " WHERE " . self:: . "=?";
+                $sql = "SELECT a.nombre 
+                FROM ". self::NOMBRE_TABLA . " a
+                INNER JOIN grupos g 
+                ON g.asignatura = a.clave_asig
+                WHERE g.alumno = " . $nControl;
 
                 $pdo = ConexionBD::obtenerInstancia()->obtenerConexion()->prepare($sql);
-                $pdo->bindParam(1, $claveAsig, )
+                $pdo->bindParam(1, $nControl);
             }
         } catch (\Throwable $th) {
             //throw $th;
