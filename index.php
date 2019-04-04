@@ -5,6 +5,7 @@
 
   require 'datos/ConexionBD.php';
   require 'controladores/Alumnos.php';
+  require 'controladores/Asignaturas.php';
   require 'vistas/VistaJson.php';
   require 'utils/ExceptionApi.php';
 
@@ -17,7 +18,7 @@
         "mensaje" => $exception->getMessage()
       );
       if ($exception->getCode()) {
-        $vista->nEstado = $exception->getCode();
+        $vista->mEstado = $exception->getCode();
       } else {
         $vista->mEstado = 500;
       }
@@ -45,7 +46,7 @@
 
   switch ($metodo) {
     case 'get':
-      # code...
+      $vista->imprimir(Asignaturas::get($peticion));
       break;
     case 'post':
       $vista->imprimir(Alumnos::post($peticion));

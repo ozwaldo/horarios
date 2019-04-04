@@ -108,6 +108,7 @@ class Alumnos
 
     if (self::autenticarAlumno($email, $password)) {
       $alumnno = self::getAlumnoPorEmail($email);
+
       if ($alumnno != null) {
         http_response_code(200);
         return [
@@ -155,10 +156,10 @@ class Alumnos
 
     $sql = "SELECT " . self::NCONTROL .
            " FROM " . self::NOMBRE_TABLA .
-           " WHERE " . self::CLAVE_API . " = $claveApi";
+           " WHERE " . self::CLAVE_API . " = '$claveApi'";
 
     $pdo = ConexionBD::obtenerInstancia()->obtenerConexion()->prepare($sql);
-    $pdo->excecute();
+    $pdo->execute();
 
     $resultado = $pdo->fetch();
     return $resultado['nControl'];
@@ -167,10 +168,10 @@ class Alumnos
   private static function validarClaveApi($claveApi) {
     $sql = "SELECT COUNT(". self::NCONTROL .")".
           " FROM " . self::NOMBRE_TABLA .
-          " WHERE " . self::CLAVE_API . " = $claveApi";
+          " WHERE " . self::CLAVE_API . " = '$claveApi'";
 
     $pdo = ConexionBD::obtenerInstancia()->obtenerConexion()->prepare($sql);
-    $pdo->excecute();
+    $pdo->execute();
 
     return $pdo->fetchColumn(0) > 0;
   }

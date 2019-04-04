@@ -57,20 +57,44 @@ class Asignaturas {
     {
         try {
             if (!$claveAsig) {
-                
                 // Obtener las asignaturas que pertenezcan al
                 // alumno autorizado.
-                
                 $sql = "SELECT a.nombre FROM ". self::NOMBRE_TABLA . 
-                " a INNER JOIN grupos g " . 
-                "ON g.asignatura = a.clave_asig ". 
-                "WHERE g.alumno = " . $nControl;
-
+                        " a INNER JOIN grupos g " . 
+                        "ON g.asignatura = a.clave_asig ". 
+                        "WHERE g.alumno = ?";
                 $pdo = ConexionBD::obtenerInstancia()->obtenerConexion()->prepare($sql);
                 $pdo->bindParam(1, $nControl);
+            } else {
+                // Obtenemos los datos de la asignatura que 
+                // corresponda a la $claveAsig.
+                $sql = "SELECT * FROM " . self::NOMBRE_TABLA . 
+                        " WHERE clave_asig = ?";
+
+                $pdo = ConexionBD::obtenerInstancia()->obtenerConexion()->prepare($sql);
+                $pdo->bindParam(1, $claveAsig);
             }
-        } catch (\Throwable $th) {
-            //throw $th;
+
+            if ($pdo->execute()) {
+                if ($pdo->rowCount() > 0) {
+                    http_response_code(200);
+                    return [
+                        "estado" => "200",
+                        "alumno" => $pdo->fetchAll(PDO::FETCH_ASSOC)
+                    ];
+                } else {
+                    http_response_code(400);
+                    return [
+                        "estado" => "400",
+                        "alumno" => "No se encontro la asignatura."
+                    ];
+                }
+            } else {
+                throw new ExceptionApi("Error en consulta.", "Error al realizar la consulta");
+            }
+        } catch (PDOException $e) {
+            throw new ExceptionApi("Error de PDO", $e->getMessage());
+            
         }
     }
 }
