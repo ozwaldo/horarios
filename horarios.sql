@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `horarios` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `horarios`;
 -- MySQL dump 10.13  Distrib 5.6.19, for osx10.7 (i386)
 --
 -- Host: 127.0.0.1    Database: horarios
@@ -43,7 +41,7 @@ CREATE TABLE `alumnos` (
 
 LOCK TABLES `alumnos` WRITE;
 /*!40000 ALTER TABLE `alumnos` DISABLE KEYS */;
-INSERT INTO `alumnos` VALUES ('i15120270x','Zairax','Sandovalx','Garciax','INF','zahyrasg09x@gmail.com','$2y$10$YhTMcdstuO2U6pBoH/zEPOS24O5DXeQlke5KF7SF4zBCU/N7BmnhW','0e03d87ea1750d01b46e1e0c09451e13'),('i15120278','Zaira','Sandoval','Garcia','INF','zahyrasg09@gmail.com','$2y$10$zBCLHG6s.zQr8gtXlk5cR.GggTMolKIvryvjMONU6QW7VkMwkrVPO','b0655441b5987b9ba64d6b25692e2263'),('i15120279','Zaira B','Sandoval','Garcia','INF','zahyrasg09@gmail.com','$2y$10$TMAnYIXSbizjfwu2JcAh2OdHwfbh9Ztoi7P1IuTm9zRJPuijuBQJK','ffda13e2d10ff1658772c945bcd1c9a6'),('I15120290','Jovanni','Vazquez','Abrego','INF','i15120290@alumnos.itsur.edu.mx','$2y$10$aCn0LTOVLtwZ0ivqBIvj.ekAOqvyG0h9f8gjyYIg70IJKZcpliw5e','08fb3204426f910a7e9c1a77e029debc');
+INSERT INTO `alumnos` VALUES ('i15120278','Zaira','Sandoval','Garcia','INF','zahyrasg09@gmail.com','$2y$10$zBCLHG6s.zQr8gtXlk5cR.GggTMolKIvryvjMONU6QW7VkMwkrVPO','b0655441b5987b9ba64d6b25692e2263'),('I15120290','Jovanni','Vazquez','Abrego','INF','i15120290@alumnos.itsur.edu.mx','$2y$10$aCn0LTOVLtwZ0ivqBIvj.ekAOqvyG0h9f8gjyYIg70IJKZcpliw5e','08fb3204426f910a7e9c1a77e029debc');
 /*!40000 ALTER TABLE `alumnos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -70,6 +68,7 @@ CREATE TABLE `asignaturas` (
 
 LOCK TABLES `asignaturas` WRITE;
 /*!40000 ALTER TABLE `asignaturas` DISABLE KEYS */;
+INSERT INTO `asignaturas` VALUES ('IFF-1019','Programación en ambiente cliente servidor',3,2,5),('IFF-1026','Tópicos de bases de datos',3,2,5),('IFF-2020','Inteligencia',3,3,2),('IFF-2121','Auditoria',3,5,0),('TIF-1402','Cómputo en la nube',3,2,5);
 /*!40000 ALTER TABLE `asignaturas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -105,9 +104,8 @@ DROP TABLE IF EXISTS `grupos`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `grupos` (
   `clave_grupo` varchar(10) NOT NULL,
-  `alumno` varchar(10) DEFAULT NULL,
-  `asignatura` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`clave_grupo`),
+  `alumno` varchar(10) NOT NULL,
+  `asignatura` varchar(10) NOT NULL,
   KEY `fk_alumno_asignatura` (`alumno`),
   KEY `fk_asingatura_alumno` (`asignatura`),
   CONSTRAINT `fk_alumno_asignatura` FOREIGN KEY (`alumno`) REFERENCES `alumnos` (`nControl`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -121,6 +119,7 @@ CREATE TABLE `grupos` (
 
 LOCK TABLES `grupos` WRITE;
 /*!40000 ALTER TABLE `grupos` DISABLE KEYS */;
+INSERT INTO `grupos` VALUES ('CN2019','i15120278','TIF-1402'),('PACS2019','i15120278','IFF-1019'),('TOPBD2019','I15120290','IFF-1026'),('AU3456','i15120278','IFF-2121'),('IN892','i15120278','IFF-2020');
 /*!40000 ALTER TABLE `grupos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -152,6 +151,14 @@ LOCK TABLES `horas` WRITE;
 /*!40000 ALTER TABLE `horas` DISABLE KEYS */;
 /*!40000 ALTER TABLE `horas` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping events for database 'horarios'
+--
+
+--
+-- Dumping routines for database 'horarios'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -162,4 +169,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-27 13:17:49
+-- Dump completed on 2019-04-04 13:52:42
